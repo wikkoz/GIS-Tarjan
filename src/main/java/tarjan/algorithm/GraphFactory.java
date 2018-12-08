@@ -8,7 +8,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class GraphFactory {
-    public Graph createGraph(GraphConfig graphConfig) {
+    public Graph<Node> createGraph(GraphConfig graphConfig) {
         Map<String, Node> vertices = graphConfig.getVertices().stream()
                 .map(Vertex::new)
                 .collect(Collectors.toMap(Vertex::getIdentity, Node::new));

@@ -1,40 +1,52 @@
 package tarjan.algorithm;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
+import org.apache.commons.lang3.tuple.Pair;
 import tarjan.algorithm.node.Node;
 import tarjan.algorithm.node.TarjanNode;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 
 public class TarjanAlgorithm {
     private final TreeBuilder treeBuilder = new TreeBuilder();
 
-    public void tarjanAlgorithm(Graph<Node> graph) {
+    public Set<Pair<Vertex, Vertex>> tarjanAlgorithm(Graph<Node> graph) {
         Graph<TarjanNode> tree = treeBuilder.buildTree(graph.getRoot());
         numberNodes(tree, orderingTree());
         numberNodes(tree, calculationLowestAndHighestNeigbour(graph, tree));
+        return findBridgeEdges(tree);
     }
 
     private void numberNodes(Graph<TarjanNode> tree, BiConsumer<TarjanNode, Integer> function) {
         List<TarjanNode> queue = Lists.newArrayList(tree.getRoot());
-        Map<TarjanNode, Boolean> visitied = new HashMap<>(tree.getSize());
+        Map<TarjanNode, Boolean> visited = new HashMap<>(tree.getSize());
         int order = 0;
         while (!queue.isEmpty()) {
             TarjanNode node = queue.get(queue.size() - 1);
             boolean processedChildren = node.getNeighbours().isEmpty() || node.getNeighbours().stream()
-                    .anyMatch(child -> visitied.getOrDefault(child, false));
+                    .anyMatch(child -> visited.getOrDefault(child, false));
             if (processedChildren) {
-                visitied.put(node, true);
+                visited.put(node, true);
                 function.accept(node, ++order);
                 queue.remove(queue.size() - 1);
             } else {
                 queue.addAll(node.getNeighbours());
             }
         }
+    }
+
+    private Set<Pair<Vertex, Vertex>> findBridgeEdges(Graph<TarjanNode> tree) {
+        return tree.getNodes().values().stream()
+                .flatMap(node -> node.getNeighbours().stream()
+                                .filter(treeNode -> treeNode.getHighestNeighbour() <= treeNode.getOrder() && treeNode.getLowestNeighbour() > treeNode.getOrder() - treeNode.getNumberOfChildren())
+                                .map(treeNode -> (Pair.of(node.getVertex(), treeNode.getVertex()))))
+                .collect(Collectors.toSet());
     }
 
     private BiConsumer<TarjanNode, Integer> orderingTree() {

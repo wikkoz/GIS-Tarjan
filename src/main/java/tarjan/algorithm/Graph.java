@@ -30,6 +30,10 @@ public class Graph<T extends AbstractNode> {
         return nodes.get(node.getVertex());
     }
 
+    public Map<Vertex, T> getNodes() {
+        return nodes;
+    }
+
     private T root() {
         return nodes.values().stream().findFirst().orElseThrow(() -> new IllegalArgumentException("Cannot find the root of graph"));
     }

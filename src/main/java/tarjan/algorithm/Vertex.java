@@ -1,5 +1,7 @@
 package tarjan.algorithm;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+
 import java.util.Objects;
 
 public class Vertex {
@@ -24,5 +26,12 @@ public class Vertex {
     @Override
     public int hashCode() {
         return Objects.hash(identity);
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this)
+                .append("identity", identity)
+                .toString();
     }
 }
