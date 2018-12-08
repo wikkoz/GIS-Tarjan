@@ -14,6 +14,7 @@ set(SOURCE_FILES
 
 # Includes
 set(INCLUDE_DIRS
+        algorithm
         common
         lib
         reader
