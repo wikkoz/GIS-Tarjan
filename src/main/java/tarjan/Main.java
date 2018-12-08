@@ -2,6 +2,7 @@ package tarjan;
 
 import tarjan.algorithm.Graph;
 import tarjan.algorithm.GraphFactory;
+import tarjan.algorithm.Vertex;
 import tarjan.reader.GraphConfig;
 import tarjan.reader.GraphEdgeConfig;
 
@@ -18,5 +19,6 @@ public class Main {
         graphConfig.setEdges(edges);
         graphConfig.setVertices(vertices);
         Graph graph = new GraphFactory().createGraph(graphConfig);
+        Graph tree = graph.buildTree();
     }
 }

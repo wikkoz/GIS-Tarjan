@@ -1,11 +1,27 @@
 package tarjan.algorithm;
 
-import java.util.List;
+import java.util.Map;
 
-public class Graph {
-    private List<Vertex> vertices;
+public class Graph<T extends Node> {
+    private final Map<Vertex,T> nodes;
+    private final Node root;
+    private final TreeBuilder treeBuilder = new TreeBuilder();
 
-    Graph(List<Vertex> vertices) {
-        this.vertices = vertices;
+    Graph(Map<Vertex, T> nodes) {
+        this.nodes = nodes;
+        this.root = root();
+    }
+
+    public Graph(Map<Vertex, T> nodes, Node root) {
+        this.nodes = nodes;
+        this.root = root;
+    }
+
+    public Graph buildTree() {
+        return treeBuilder.buildTree(root);
+    }
+
+    private Node root() {
+        return nodes.get(0);
     }
 }

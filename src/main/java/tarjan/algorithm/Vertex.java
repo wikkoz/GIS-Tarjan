@@ -1,27 +1,16 @@
 package tarjan.algorithm;
 
-import java.util.HashSet;
 import java.util.Objects;
-import java.util.Set;
 
 public class Vertex {
-    private Set<Edge> edges=  new HashSet<>();
     private String identity;
 
     Vertex(String identity) {
         this.identity = identity;
     }
 
-    public Set<Edge> getEdges() {
-        return edges;
-    }
-
     String getIdentity() {
         return identity;
-    }
-
-    void addEdge(Edge edge) {
-        edges.add(edge);
     }
 
     @Override

@@ -2,23 +2,25 @@ package tarjan.algorithm;
 
 import tarjan.reader.GraphConfig;
 
-import java.util.ArrayList;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class GraphFactory {
     public Graph createGraph(GraphConfig graphConfig) {
-        Map<String, Vertex> vertices =  graphConfig.getVertices().stream()
+        Map<String, Node> vertices = graphConfig.getVertices().stream()
                 .map(Vertex::new)
-                .collect(Collectors.toMap(Vertex::getIdentity, Function.identity()));
+                .collect(Collectors.toMap(Vertex::getIdentity, Node::new));
 
-        graphConfig.getEdges().stream()
-                .map(e -> new Edge(vertices.get(e.getFirstEdge()), vertices.get(e.getSecondEdge())))
+        graphConfig.getEdges()
                 .forEach(e -> {
-                    e.getFirst().addEdge(e);
-                    e.getSecond().addEdge(e);
+                    Node firstVertex = vertices.get(e.getFirstEdge());
+                    Node secondVertex = vertices.get(e.getSecondEdge());
+                    firstVertex.addNeighbour(secondVertex);
+                    secondVertex.addNeighbour(firstVertex);
                 });
-        return new Graph(new ArrayList<>(vertices.values()));
+        return new Graph<>(vertices.values()
+                .stream()
+                .collect(Collectors.toMap(Node::getNode, Function.identity())));
     }
 }
