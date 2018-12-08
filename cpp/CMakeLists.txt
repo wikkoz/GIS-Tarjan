@@ -12,6 +12,7 @@ set(SOURCE_FILES
 # Includes
 set(INCLUDE_DIRS
         common
+        reader
 )
 
 # Compiler flags and options
