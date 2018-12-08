@@ -1,30 +1,30 @@
 package tarjan.reader;
 
 public class GraphEdgeConfig {
-    private String firstEdge;
-    private String secondEdge;
+    private String firstVertex;
+    private String secondVertex;
 
     public GraphEdgeConfig() {
     }
 
-    public GraphEdgeConfig(String firstEdge, String secondEdge) {
-        this.firstEdge = firstEdge;
-        this.secondEdge = secondEdge;
+    public GraphEdgeConfig(String firstVertex, String secondEdge) {
+        this.firstVertex = firstVertex;
+        this.secondVertex = secondVertex;
     }
 
-    public String getFirstEdge() {
-        return firstEdge;
+    public String getFirstVertex() {
+        return firstVertex;
     }
 
-    public void setFirstEdge(String firstEdge) {
-        this.firstEdge = firstEdge;
+    public void setFirstVertex(String firstVertex) {
+        this.firstVertex = firstVertex;
     }
 
-    public String getSecondEdge() {
-        return secondEdge;
+    public String getSecondVertex() {
+        return secondVertex;
     }
 
-    public void setSecondEdge(String secondEdge) {
-        this.secondEdge = secondEdge;
+    public void setSecondVertex(String secondVertex) {
+        this.secondVertex = secondVertex;
     }
 }

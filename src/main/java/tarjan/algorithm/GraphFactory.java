@@ -14,8 +14,8 @@ public class GraphFactory {
 
         graphConfig.getEdges()
                 .forEach(e -> {
-                    Node firstVertex = vertices.get(e.getFirstEdge());
-                    Node secondVertex = vertices.get(e.getSecondEdge());
+                    Node firstVertex = vertices.get(e.getFirstVertex());
+                    Node secondVertex = vertices.get(e.getSecondVertex());
                     firstVertex.addNeighbour(secondVertex);
                     secondVertex.addNeighbour(firstVertex);
                 });

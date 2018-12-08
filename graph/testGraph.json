@@ -1,0 +1,28 @@
+{
+  "vertices": ["A", "B", "C", "D"],
+  "edges": [
+    {
+      "firstVertex": "A",
+      "secondVertex": "B"
+    },
+    {
+      "firstVertex": "A",
+      "secondVertex": "C"
+    },
+    {
+      "firstVertex": "A",
+      "secondVertex": "D"
+    },
+    {
+      "firstVertex": "B",
+      "secondVertex": "C"
+    },
+    {
+      "firstVertex": "B",
+      "secondVertex": "D"
+    },    {
+      "firstVertex": "C",
+      "secondVertex": "D"
+    }
+  ]
+}

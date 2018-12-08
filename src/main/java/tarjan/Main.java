@@ -5,6 +5,7 @@ import tarjan.algorithm.GraphFactory;
 import tarjan.algorithm.Vertex;
 import tarjan.reader.GraphConfig;
 import tarjan.reader.GraphEdgeConfig;
+import tarjan.reader.GraphReader;
 
 import java.util.Arrays;
 import java.util.List;
@@ -12,12 +13,7 @@ import java.util.List;
 public class Main {
 
     public static void main(String[] args) {
-        GraphConfig graphConfig = new GraphConfig();
-        List<String> vertices = Arrays.asList("A", "B", "C", "D");
-        List<GraphEdgeConfig> edges = Arrays.asList(new GraphEdgeConfig("A", "B"), new GraphEdgeConfig("A", "C"),
-        new GraphEdgeConfig("A", "D"), new GraphEdgeConfig("B", "C"), new GraphEdgeConfig("D", "B"), new GraphEdgeConfig("D", "C"));
-        graphConfig.setEdges(edges);
-        graphConfig.setVertices(vertices);
+        GraphConfig graphConfig = GraphReader.readFile("testGraph.json");
         Graph graph = new GraphFactory().createGraph(graphConfig);
         Graph tree = graph.buildTree();
     }
