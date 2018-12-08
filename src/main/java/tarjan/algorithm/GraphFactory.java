@@ -1,5 +1,6 @@
 package tarjan.algorithm;
 
+import tarjan.algorithm.node.Node;
 import tarjan.reader.GraphConfig;
 
 import java.util.Map;
@@ -21,6 +22,6 @@ public class GraphFactory {
                 });
         return new Graph<>(vertices.values()
                 .stream()
-                .collect(Collectors.toMap(Node::getNode, Function.identity())));
+                .collect(Collectors.toMap(Node::getVertex, Function.identity())));
     }
 }

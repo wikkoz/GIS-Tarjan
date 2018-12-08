@@ -1,27 +1,36 @@
 package tarjan.algorithm;
 
+import tarjan.algorithm.node.AbstractNode;
+
 import java.util.Map;
 
-public class Graph<T extends Node> {
+public class Graph<T extends AbstractNode> {
     private final Map<Vertex,T> nodes;
-    private final Node root;
-    private final TreeBuilder treeBuilder = new TreeBuilder();
+    private final T root;
 
     Graph(Map<Vertex, T> nodes) {
         this.nodes = nodes;
         this.root = root();
     }
 
-    public Graph(Map<Vertex, T> nodes, Node root) {
+    public Graph(Map<Vertex, T> nodes, T root) {
         this.nodes = nodes;
         this.root = root;
     }
 
-    public Graph buildTree() {
-        return treeBuilder.buildTree(root);
+    public int getSize() {
+        return nodes.size();
     }
 
-    private Node root() {
-        return nodes.get(0);
+    public T getRoot() {
+        return root;
+    }
+
+    public T findNode(AbstractNode node) {
+        return nodes.get(node.getVertex());
+    }
+
+    private T root() {
+        return nodes.values().stream().findFirst().orElseThrow(() -> new IllegalArgumentException("Cannot find the root of graph"));
     }
 }

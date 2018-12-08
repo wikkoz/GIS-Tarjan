@@ -5,11 +5,11 @@ import java.util.Objects;
 public class Vertex {
     private String identity;
 
-    Vertex(String identity) {
+    public Vertex(String identity) {
         this.identity = identity;
     }
 
-    String getIdentity() {
+    public String getIdentity() {
         return identity;
     }
 

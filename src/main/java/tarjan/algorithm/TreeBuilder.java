@@ -1,14 +1,15 @@
 package tarjan.algorithm;
 
 import com.google.common.collect.Lists;
+import tarjan.algorithm.node.Node;
+import tarjan.algorithm.node.TarjanNode;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class TreeBuilder {
-    public Graph buildTree(Node graphNode) {
+    public Graph<TarjanNode> buildTree(Node graphNode) {
         Map<Node, Boolean> visited = new HashMap<>();
         Map<Vertex, TarjanNode> treeNodes = new HashMap<>();
         List<Node> queue = Lists.newArrayList(graphNode);
@@ -21,16 +22,16 @@ public class TreeBuilder {
                     .forEach(neighbourGraphNode -> {
                         queue.add(neighbourGraphNode);
                         visited.put(neighbourGraphNode, true);
-                        Node childTreeNode = getOrCreateNode(neighbourGraphNode, treeNodes);
+                        TarjanNode childTreeNode = getOrCreateNode(neighbourGraphNode, treeNodes);
                         treeNode.addNeighbour(childTreeNode);
                     });
         }
 
-        return new Graph<>(treeNodes, treeNodes.get(graphNode.getNode()));
+        return new Graph<>(treeNodes, treeNodes.get(graphNode.getVertex()));
     }
 
 
     private TarjanNode getOrCreateNode(Node graphNode, Map<Vertex, TarjanNode> treeNodes) {
-        return treeNodes.computeIfAbsent(graphNode.getNode(), TarjanNode::new);
+        return treeNodes.computeIfAbsent(graphNode.getVertex(), TarjanNode::new);
     }
 }
