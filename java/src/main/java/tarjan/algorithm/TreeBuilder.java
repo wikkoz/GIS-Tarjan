@@ -14,7 +14,7 @@ public class TreeBuilder {
         Map<Vertex, TarjanNode> treeNodes = new HashMap<>();
         List<Node> queue = Lists.newArrayList(graphNode);
         while (!queue.isEmpty()) {
-            Node processedGraphNode = queue.remove(0);
+            Node processedGraphNode = queue.remove(queue.size() - 1);
             TarjanNode treeNode = getOrCreateNode(processedGraphNode, treeNodes);
             visited.put(processedGraphNode, true);
             processedGraphNode.getNeighbours().stream()
