@@ -20,7 +20,7 @@ public:
         return nodes->size();
     }
 
-    const nodes_map_ptr& getNodes() {
+    const nodes_map_ptr& getNodes() const {
         return nodes;
     }
 
