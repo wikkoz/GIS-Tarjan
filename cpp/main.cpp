@@ -1,10 +1,12 @@
 #include "Printer.h"
 #include "GraphReader.hpp"
+#include "GraphFactory.hpp"
 
 using bridges_finder::Printer;
 using bridges_finder::json;
 using bridges_finder::GraphConfig;
 using bridges_finder::GraphReader;
+using bridges_finder::GraphFactory;
 
 int main() {
     const std::string INPUT_NAMES[] = {
@@ -15,9 +17,8 @@ int main() {
 
     for (const auto& name: INPUT_NAMES) {
         GraphConfig config;
-        bool res;
 
-        res = GraphReader::readFile(name, config);
+        bool res = GraphReader::readFile(name, config);
 
         if (!res) {
             Printer::printInvalidFile();
@@ -26,8 +27,8 @@ int main() {
 
         json j{config};
 
-        const auto graph = j.dump(4);
-        Printer::printRawGraph(name, graph);
+        const auto graph = GraphFactory::createGraph(config);
+        Printer::printAdjacencyList(name, graph);
     }
 
     return 0;

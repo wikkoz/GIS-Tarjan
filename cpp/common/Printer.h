@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <string>
+#include "Graph.hpp"
 
 namespace bridges_finder {
 
@@ -16,6 +17,27 @@ public:
     static void printRawGraph(const std::string& name, const std::string& raw) {
         std::cout << "************* Graph " << name << " *************" << std::endl;
         std::cout << raw << std::endl;
+    }
+
+    static void printAdjacencyList(const std::string name, const std::shared_ptr<Graph>& graph) {
+        using std::cout;
+        using std::endl;
+
+        cout << "--------------------------" << endl;
+        cout << name << endl;
+        cout << " size: " << graph->getSize() << endl;
+        cout << "--------------------------" << endl;
+        cout << " node: neighbours" << endl;
+        cout << "--------------------------" << endl;
+
+        const auto& nodes = *(graph->getNodes());
+
+        for (const auto& [id, node]: nodes) {
+            cout << "    " << id << ": ";
+            for (const auto& neighbour : node->getNeighbours()) {
+                cout << neighbour->getIdentity() << " ";
+            } cout << endl;
+        } cout << endl;
     }
 
     Printer() = delete;
