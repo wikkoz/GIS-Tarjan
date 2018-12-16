@@ -11,6 +11,7 @@ set(SOURCE_FILES
 
 # Includes
 set(INCLUDE_DIRS
+        common
 )
 
 # Compiler flags and options
