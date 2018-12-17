@@ -3,7 +3,10 @@
 
 #include <iostream>
 #include <string>
+#include <stack>
+#include <unordered_set>
 #include "Graph.hpp"
+#include "Tree.hpp"
 
 namespace bridges_finder {
 
@@ -36,6 +39,50 @@ public:
             cout << "    " << id << ": ";
             for (const auto& neighbour : node->getNeighbours()) {
                 cout << neighbour->getIdentity() << " ";
+            } cout << endl;
+        } cout << endl;
+    }
+
+    static void printSpanningTree(const std::shared_ptr<Tree>& tree) {
+        using std::cout;
+        using std::endl;
+
+        cout << "--------------------------" << endl;
+        cout << " (parent) node: children" << endl;
+        cout << "--------------------------" << endl;
+
+        std::stack<std::string> toVisit;
+        std::unordered_set<std::string> visited;
+
+        const auto& root = tree->getRoot();
+        const auto rootId = root->getIdentity();
+
+        toVisit.push(rootId);
+
+        while(!toVisit.empty()) {
+            const auto id = toVisit.top();
+            const auto node = (*(tree->getNodes()))[id];
+            toVisit.pop();
+
+            const auto parent = node->getParent();
+            if (parent) {
+                cout << "(" << parent->getIdentity() << ") ";
+            } else {
+                cout << "    ";
+            }
+            cout << id << ": ";
+
+            for (const auto& n : node->getNeighbours()) {
+                const auto& nid = n->getIdentity();
+
+                cout << nid << " ";
+
+                if (visited.find(nid) != visited.end()) {
+                    continue;
+                }
+
+                toVisit.push(nid);
+                visited.insert(nid);
             } cout << endl;
         } cout << endl;
     }
