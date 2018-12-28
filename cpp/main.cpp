@@ -10,6 +10,7 @@ int main() {
     const std::string INPUT_NAMES[] = {
             "../../input/in1.json",
             "../../input/in2.json",
+            "../../input/in3.json",
     };
 
     for (const auto& name: INPUT_NAMES) {

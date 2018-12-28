@@ -1,0 +1,55 @@
+{
+  "vertices": [
+    "A",
+    "B",
+    "C",
+    "D",
+    "E",
+    "F",
+    "G",
+    "H",
+    "I"
+  ],
+  "edges": [
+    {
+      "firstVertex": "A",
+      "secondVertex": "B"
+    },
+    {
+      "firstVertex": "B",
+      "secondVertex": "C"
+    },
+    {
+      "firstVertex": "C",
+      "secondVertex": "D"
+    },
+    {
+      "firstVertex": "D",
+      "secondVertex": "E"
+    },
+    {
+      "firstVertex": "D",
+      "secondVertex": "F"
+    },
+    {
+      "firstVertex": "D",
+      "secondVertex": "G"
+    },
+    {
+      "firstVertex": "E",
+      "secondVertex": "F"
+    },
+    {
+      "firstVertex": "G",
+      "secondVertex": "H"
+    },
+    {
+      "firstVertex": "G",
+      "secondVertex": "I"
+    },
+    {
+      "firstVertex": "H",
+      "secondVertex": "I"
+    }
+  ]
+}
