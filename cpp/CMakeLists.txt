@@ -4,6 +4,9 @@ cmake_minimum_required(VERSION 3.9)
 set(TARGET_NAME bridges_finder)
 project(bridges_finder)
 
+# Dependencies
+include(dependencies.cmake)
+
 # Sources
 set(SOURCE_FILES
         main.cpp
@@ -12,6 +15,7 @@ set(SOURCE_FILES
 # Includes
 set(INCLUDE_DIRS
         common
+        lib
         reader
 )
 

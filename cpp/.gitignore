@@ -1,3 +1,6 @@
+# Dependencies
+lib/json.hpp
+
 # Prerequisites
 *.d
 
