@@ -26,9 +26,7 @@ public:
         using std::cout;
         using std::endl;
 
-        cout << "--------------------------" << endl;
         cout << name << endl;
-        cout << " size: " << graph->getSize() << endl;
         cout << "--------------------------" << endl;
         cout << " node: neighbours" << endl;
         cout << "--------------------------" << endl;
@@ -40,7 +38,7 @@ public:
             for (const auto& neighbour : node->getNeighbours()) {
                 cout << neighbour->getIdentity() << " ";
             } cout << endl;
-        } cout << endl;
+        }
     }
 
     static void printSpanningTree(const std::shared_ptr<Tree>& tree) {
@@ -84,6 +82,24 @@ public:
                 toVisit.push(nid);
                 visited.insert(nid);
             } cout << endl;
+        }
+    }
+
+    static void printBridges(std::shared_ptr<std::unordered_set<std::shared_ptr<std::pair<std::string, std::string>>>> bridges) {
+        using std::cout;
+        using std::endl;
+
+        cout << "--------------------------" << endl;
+        cout << " bridges" << endl;
+        cout << "--------------------------" << endl;
+
+        if (!bridges->size()) {
+            cout << " Not found" << endl << endl;
+            return;
+        }
+
+        for (const auto& bridge: *bridges) {
+            cout << " " << bridge->first << "-" << bridge->second << endl;
         } cout << endl;
     }
 

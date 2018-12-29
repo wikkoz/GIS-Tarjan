@@ -35,8 +35,7 @@ int main() {
         Printer::printAdjacencyList(name, graph);
 
         const auto& [tree, solution] = BridgesFinder::find(graph);
-
-        Printer::printSpanningTree(tree);
+        Printer::printBridges(solution);
     }
 
     return 0;
