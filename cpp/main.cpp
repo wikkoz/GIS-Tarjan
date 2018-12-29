@@ -2,6 +2,7 @@
 #include "GraphReader.hpp"
 #include "GraphFactory.hpp"
 #include "TreeBuilder.hpp"
+#include "BridgesFinder.hpp"
 
 using bridges_finder::Printer;
 using bridges_finder::json;
@@ -9,6 +10,7 @@ using bridges_finder::GraphConfig;
 using bridges_finder::GraphReader;
 using bridges_finder::GraphFactory;
 using bridges_finder::TreeBuilder;
+using bridges_finder::BridgesFinder;
 
 int main() {
     const std::string INPUT_NAMES[] = {
@@ -32,8 +34,8 @@ int main() {
         const auto graph = GraphFactory::createGraph(config);
         Printer::printAdjacencyList(name, graph);
 
-        const auto root = graph->getNodes()->begin()->second;
-        const auto tree = TreeBuilder::buildTree(*root);
+        const auto& [tree, solution] = BridgesFinder::find(graph);
+
         Printer::printSpanningTree(tree);
     }
 
