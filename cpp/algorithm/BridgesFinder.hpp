@@ -90,7 +90,10 @@ public:
             node->setHighestNeighbour(highestNeighbour);
         });
 
-        return std::pair<tree_ptr, solution_ptr>(tree, NULL);
+        // Find bridge edges
+        auto bridgeEdges = findBridgeEdges(tree);
+
+        return std::pair<tree_ptr, solution_ptr>(tree, bridgeEdges);
     }
 
 private:
@@ -125,6 +128,26 @@ private:
                 }
             }
         }
+    }
+
+    static solution_ptr findBridgeEdges(const tree_ptr& tree) {
+        solution_ptr ret = std::make_shared<solution>();
+
+        for (const auto& [id, node]: *(tree->getNodes())) {
+            const auto& neighbours = node->getNeighbours();
+
+            for (auto& neighbour : node->getNeighbours()) {
+                const auto& nid = neighbour->getIdentity();
+                auto& n = (*(tree->getNodes()))[nid];
+
+                if (n->getHighestNeighbour() <= n->getOrder() &&
+                        n->getLowestNeighbour() > n->getOrder() - n->getNumberOfChildren()) {
+                    ret->emplace(std::make_shared<std::pair<std::string, std::string>>(node->getIdentity(), n->getIdentity()));
+                }
+            }
+        }
+
+        return ret;
     }
 
     BridgesFinder() = delete;
