@@ -39,6 +39,57 @@ public:
             node->setNumberOfChildren(noc);
         });
 
+        // Galculate H(v) and L(v)
+        BridgesFinder::goPostorder(tree, [&graph, &tree](const std::string& id, int) {
+            auto& node = (*(tree->getNodes()))[id];
+            const auto& graphNode = (*(graph->getNodes()))[id];
+
+            int order = node->getOrder();
+            const auto& children = node->getNeighbours();
+
+            std::list<std::string> treeNeighbours;
+
+            for (const auto& graphNeighbour: graphNode->getNeighbours()) {
+                const auto parent = node->getParent();
+                if (!parent) {
+                    continue;
+                }
+                if ((*graphNeighbour == *parent)) {
+                    continue;
+                }
+                treeNeighbours.push_back(graphNeighbour->getIdentity());
+            }
+
+            std::vector<int> extremeNeighbours;
+
+            std::transform(treeNeighbours.begin(), treeNeighbours.end(), std::back_inserter(extremeNeighbours),
+                    [&tree](const auto& id) {
+                const auto n = (*(tree->getNodes()))[id];
+                return std::min(n->getLowestNeighbour(), n->getOrder());
+            });
+
+            int smallestNeighbour = std::accumulate(extremeNeighbours.begin(), extremeNeighbours.end(), order,
+                    [](int first, int second) {
+                return std::min(first, second);
+            });
+
+            extremeNeighbours.clear();
+
+            std::transform(treeNeighbours.begin(), treeNeighbours.end(), std::back_inserter(extremeNeighbours),
+                    [&tree](const auto& id) {
+                const auto n = (*(tree->getNodes()))[id];
+                return std::max(n->getHighestNeighbour(), n->getOrder());
+            });
+
+            int highestNeighbour = std::accumulate(extremeNeighbours.begin(), extremeNeighbours.end(), order,
+                    [](int first, int second) {
+                return std::max(first, second);
+            });
+
+            node->setLowestNeighbour(smallestNeighbour);
+            node->setHighestNeighbour(highestNeighbour);
+        });
+
         return std::pair<tree_ptr, solution_ptr>(tree, NULL);
     }
 
