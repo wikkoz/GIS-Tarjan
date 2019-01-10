@@ -22,7 +22,7 @@ public:
         std::cout << raw << std::endl;
     }
 
-    static void printAdjacencyList(const std::string name, const std::shared_ptr<Graph>& graph) {
+    static void printAdjacencyList(const std::string name, Graph& graph) {
         using std::cout;
         using std::endl;
 
@@ -31,17 +31,17 @@ public:
         cout << " node: neighbours" << endl;
         cout << "--------------------------" << endl;
 
-        const auto& nodes = *(graph->getNodes());
+        const auto& nodes = graph.getNodes();
 
         for (const auto& [id, node]: nodes) {
             cout << "    " << id << ": ";
             for (const auto& neighbour : node->getNeighbours()) {
-                cout << neighbour->getIdentity() << " ";
+                cout << neighbour << " ";
             } cout << endl;
         }
     }
 
-    static void printSpanningTree(const std::shared_ptr<Tree>& tree) {
+    static void printSpanningTree(Tree& tree) {
         using std::cout;
         using std::endl;
 
@@ -49,38 +49,38 @@ public:
         cout << " (parent) node: children" << endl;
         cout << "--------------------------" << endl;
 
-        std::stack<std::string> toVisit;
+        std::stack<std::string> to_visit;
         std::unordered_set<std::string> visited;
 
-        const auto& root = tree->getRoot();
-        const auto rootId = root->getIdentity();
+        auto& nodes = tree.getNodes();
+        const auto& root = tree.getRoot();
+        const auto rootId = root.getIdentity();
 
-        toVisit.push(rootId);
+        to_visit.push(rootId);
 
-        while(!toVisit.empty()) {
-            const auto id = toVisit.top();
-            const auto node = (*(tree->getNodes()))[id];
-            toVisit.pop();
+        while(!to_visit.empty()) {
+            const auto id = to_visit.top();
+            to_visit.pop();
 
+            const auto& node = nodes[id];
             const auto parent = node->getParent();
-            if (parent) {
-                cout << "(" << parent->getIdentity() << ") ";
+
+            if (!parent.empty()) {
+                cout << "(" << parent << ") ";
             } else {
                 cout << "    ";
             }
             cout << id << ": ";
 
-            for (const auto& n : node->getNeighbours()) {
-                const auto& nid = n->getIdentity();
+            for (const auto& neighbour : node->getNeighbours()) {
+                cout << neighbour << " ";
 
-                cout << nid << " ";
-
-                if (visited.find(nid) != visited.end()) {
+                if (visited.find(neighbour) != visited.end()) {
                     continue;
                 }
 
-                toVisit.push(nid);
-                visited.insert(nid);
+                to_visit.push(neighbour);
+                visited.insert(neighbour);
             } cout << endl;
         }
     }

@@ -5,7 +5,7 @@
 #include <memory>
 #include <functional>
 #include <utility>
-#include "TreeBuilder.hpp"
+#include "Tree.hpp"
 
 namespace bridges_finder {
 
@@ -17,21 +17,20 @@ public:
     using solution_ptr = std::shared_ptr<solution>;
     using return_type = std::pair<tree_ptr, solution_ptr>;
 
-    static return_type find(const std::shared_ptr<Graph>& graph) {
+    static solution_ptr find(Graph& graph) {
         // Build spanning tree
-        const auto root = graph->getNodes()->begin()->second;
-        const auto tree = TreeBuilder::buildTree(*root);
+        const auto root = graph.getNodes().begin()->second;
+        Tree tree{graph, *root};
 
         // Number nodes (set order and number of children)
         BridgesFinder::goPostorder(tree, [&tree](const std::string& id, const int order) {
-            auto& node = (*(tree->getNodes()))[id];
+            auto& node = tree.getNodes()[id];
             const auto& children = node->getNeighbours();
 
             std::vector<int> nocs;
             std::transform(children.begin(), children.end(), std::back_inserter(nocs),
-                    [&tree](const auto& child) {
-                const auto cid = child->getIdentity();
-                return (*(tree->getNodes()))[cid]->getNumberOfChildren();
+                    [&tree](const auto& cid) {
+                return tree.getNodes()[cid]->getNumberOfChildren();
             });
             const int noc = std::accumulate(nocs.begin(), nocs.end(), 1);
 
@@ -41,30 +40,30 @@ public:
 
         // Galculate H(v) and L(v)
         BridgesFinder::goPostorder(tree, [&graph, &tree](const std::string& id, int) {
-            auto& node = (*(tree->getNodes()))[id];
-            const auto& graphNode = (*(graph->getNodes()))[id];
+            auto& node = tree.getNodes()[id];
+            const auto& graphNode = graph.getNodes()[id];
 
             int order = node->getOrder();
             const auto& children = node->getNeighbours();
 
             std::list<std::string> treeNeighbours;
 
-            for (const auto& graphNeighbour: graphNode->getNeighbours()) {
+            for (const auto& neighbour: graphNode->getNeighbours()) {
                 const auto parent = node->getParent();
-                if (!parent) {
+                if (parent.empty()) {
                     continue;
                 }
-                if ((*graphNeighbour == *parent)) {
+                if ((neighbour == parent)) {
                     continue;
                 }
-                treeNeighbours.push_back(graphNeighbour->getIdentity());
+                treeNeighbours.push_back(neighbour);
             }
 
             std::vector<int> extremeNeighbours;
 
             std::transform(treeNeighbours.begin(), treeNeighbours.end(), std::back_inserter(extremeNeighbours),
                     [&tree](const auto& id) {
-                const auto n = (*(tree->getNodes()))[id];
+                const auto n = tree.getNodes()[id];
                 return std::min(n->getLowestNeighbour(), n->getOrder());
             });
 
@@ -77,7 +76,7 @@ public:
 
             std::transform(treeNeighbours.begin(), treeNeighbours.end(), std::back_inserter(extremeNeighbours),
                     [&tree](const auto& id) {
-                const auto n = (*(tree->getNodes()))[id];
+                const auto n = tree.getNodes()[id];
                 return std::max(n->getHighestNeighbour(), n->getOrder());
             });
 
@@ -91,28 +90,26 @@ public:
         });
 
         // Find bridge edges
-        auto bridgeEdges = findBridgeEdges(tree);
-
-        return std::pair<tree_ptr, solution_ptr>(tree, bridgeEdges);
+        return findBridgeEdges(tree);
     }
 
 private:
-    static void goPostorder(const std::shared_ptr<Tree>& tree, std::function<void(const std::string&, int)> function) {
-        std::stack<std::string> toVisit;
+    static void goPostorder(Tree& tree, std::function<void(const std::string&, int)> function) {
+        std::stack<std::string> to_visit;
         std::unordered_set<std::string> visited;
         int order = 0;
 
-        toVisit.push(tree->getRoot()->getIdentity());
+        to_visit.push(tree.getRoot().getIdentity());
 
-        while (!toVisit.empty()) {
-            auto id = toVisit.top();
-            auto node = (*tree->getNodes())[id];
+        while (!to_visit.empty()) {
+            auto id = to_visit.top();
+            auto node = tree.getNodes()[id];
 
             bool childrenProcessed = true;
 
             // children not processed if at least one is not processed
-            for (const auto &n: node->getNeighbours()) {
-                if (visited.find(n->getIdentity()) == visited.end()) {
+            for (const auto neighbour: node->getNeighbours()) {
+                if (visited.find(neighbour) == visited.end()) {
                     childrenProcessed = false;
                     break;
                 }
@@ -121,24 +118,23 @@ private:
             if (childrenProcessed) {
                 visited.insert(id);
                 function(id, ++order);
-                toVisit.pop();
+                to_visit.pop();
             } else {
-                for (const auto &n: node->getNeighbours()) {
-                    toVisit.push(n->getIdentity());
+                for (const auto neighbour: node->getNeighbours()) {
+                    to_visit.push(neighbour);
                 }
             }
         }
     }
 
-    static solution_ptr findBridgeEdges(const tree_ptr& tree) {
+    static solution_ptr findBridgeEdges(Tree& tree) {
         solution_ptr ret = std::make_shared<solution>();
 
-        for (const auto& [id, node]: *(tree->getNodes())) {
+        for (const auto& [_, node]: tree.getNodes()) {
             const auto& neighbours = node->getNeighbours();
 
-            for (auto& neighbour : node->getNeighbours()) {
-                const auto& nid = neighbour->getIdentity();
-                auto& n = (*(tree->getNodes()))[nid];
+            for (auto& nid : node->getNeighbours()) {
+                auto& n = tree.getNodes()[nid];
 
                 if (n->getHighestNeighbour() <= n->getOrder() &&
                         n->getLowestNeighbour() > n->getOrder() - n->getNumberOfChildren()) {

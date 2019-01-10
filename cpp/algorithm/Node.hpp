@@ -16,11 +16,11 @@ public:
 
     Node(const Node& node) : Vertex(node), neighbours(node.getNeighbours()) {}
 
-    virtual void addNeighbour(const Node& node) {
-        neighbours.push_back(std::make_shared<Node>(node));
+    virtual void addNeighbour(const std::string& neighbour) {
+        neighbours.push_back(neighbour);
     }
 
-    const std::list<std::shared_ptr<Node>>& getNeighbours() const {
+    const std::list<std::string>& getNeighbours() const {
         return neighbours;
     }
 
@@ -35,7 +35,7 @@ public:
     }
 
 protected:
-    std::list<std::shared_ptr<Node>> neighbours;
+    std::list<std::string> neighbours;
 };
 
 } // bridges_finder

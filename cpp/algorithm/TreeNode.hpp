@@ -24,11 +24,11 @@ public:
                 highestNeighbour(node.highestNeighbour),
                 lowestNeighbour(node.lowestNeighbour) {}
 
-    const std::shared_ptr<TreeNode>& getParent() const {
+    const std::string getParent() const {
         return parent;
     }
 
-    void setParent(const std::shared_ptr<TreeNode>& parent) {
+    void setParent(const std::string& parent) {
         this->parent = parent;
     }
 
@@ -65,7 +65,7 @@ public:
     }
 
 private:
-    std::shared_ptr<TreeNode> parent;
+    std::string parent;
     int order;
     int numberOfChildren;
     int highestNeighbour;

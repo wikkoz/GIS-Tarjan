@@ -1,15 +1,13 @@
 #include "Printer.h"
 #include "GraphReader.hpp"
-#include "GraphFactory.hpp"
-#include "TreeBuilder.hpp"
+#include "Graph.hpp"
 #include "BridgesFinder.hpp"
 
 using bridges_finder::Printer;
 using bridges_finder::json;
 using bridges_finder::GraphConfig;
 using bridges_finder::GraphReader;
-using bridges_finder::GraphFactory;
-using bridges_finder::TreeBuilder;
+using bridges_finder::Graph;
 using bridges_finder::BridgesFinder;
 
 int main() {
@@ -31,10 +29,10 @@ int main() {
 
         json j{config};
 
-        const auto graph = GraphFactory::createGraph(config);
+        Graph graph{config};
         Printer::printAdjacencyList(name, graph);
 
-        const auto& [tree, solution] = BridgesFinder::find(graph);
+        const auto& solution = BridgesFinder::find(graph);
         Printer::printBridges(solution);
     }
 

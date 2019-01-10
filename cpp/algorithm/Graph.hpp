@@ -5,27 +5,45 @@
 #include <unordered_map>
 #include "Node.hpp"
 
+#include "GraphConfig.hpp"
+
 namespace bridges_finder {
 
 class Graph
 {
 public:
     using nodes_map = std::unordered_map<std::string, std::shared_ptr<Node>>;
-    using nodes_map_ptr = std::shared_ptr<nodes_map>;
 
-    Graph(nodes_map_ptr& nodes)
-            : nodes(nodes) {}
+    Graph(const GraphConfig& config) {
+        const auto& edges = config.getEdges();
+        const auto& identities = config.getVertices();
 
-    std::size_t getSize() {
-        return nodes->size();
+        for (const auto& id: identities) {
+            nodes[id] = std::make_shared<Node>(id);
+        }
+
+        for (const auto& edge : edges) {
+            const auto& firstId = edge.getFirstVertex();
+            const auto& secondId = edge.getSecondVertex();
+
+            auto& firstNode = nodes[firstId];
+            auto& secondNode = nodes[secondId];
+
+            firstNode->addNeighbour(secondNode->getIdentity());
+            secondNode->addNeighbour(firstNode->getIdentity());
+        }
     }
 
-    const nodes_map_ptr& getNodes() const {
+    std::size_t getSize() {
+        return nodes.size();
+    }
+
+    nodes_map& getNodes() {
         return nodes;
     }
 
 private:
-    nodes_map_ptr nodes;
+    nodes_map nodes;
 };
 
 } // bridges_finder

@@ -37,7 +37,7 @@ public:
                 treeNodes->emplace(nid, std::make_shared<TreeNode>(nid));
                 toVisit.push(n);
                 visited.insert(nid);
-                (*treeNodes)[id]->addNeighbour(*((*treeNodes)[nid]));
+                (*treeNodes)[id]->addNeighbour((*treeNodes)[nid]);
                 (*treeNodes)[nid]->setParent((*treeNodes)[id]);
             }
         }

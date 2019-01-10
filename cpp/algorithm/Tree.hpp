@@ -1,6 +1,8 @@
 #ifndef BRIDGES_FINDER_TREE_HPP
 #define BRIDGES_FINDER_TREE_HPP
 
+#include <stack>
+#include "Graph.hpp"
 #include "TreeNode.hpp"
 
 namespace bridges_finder {
@@ -8,22 +10,47 @@ namespace bridges_finder {
 class Tree {
 public:
     using nodes_map = std::unordered_map<std::string, std::shared_ptr<TreeNode>>;
-    using nodes_map_ptr = std::shared_ptr<nodes_map>;
 
-    Tree(nodes_map_ptr &nodes, const TreeNode &root)
-            : nodes(nodes), root(std::make_shared<TreeNode>(root)) {}
+    Tree(Graph& graph, const TreeNode &root)
+            : root(root.getIdentity()) {
+        std::stack<std::shared_ptr<Node>> to_visit;
+        std::unordered_set<std::string> visited;
 
-    const std::shared_ptr<TreeNode> &getRoot() {
-        return root;
+        to_visit.push(std::make_shared<Node>(root));
+
+        while (!to_visit.empty()) {
+            auto node = to_visit.top();
+            to_visit.pop();
+
+            const auto id = node->getIdentity();
+            nodes.emplace(id, std::make_shared<TreeNode>(id));
+            visited.insert(id);
+
+            for (auto& nid : node->getNeighbours()) {
+                if (visited.find(nid) != visited.end()) {
+                    continue;
+                }
+
+                nodes.emplace(nid, std::make_shared<TreeNode>(nid));
+                to_visit.push(graph.getNodes()[nid]);
+                visited.insert(nid);
+                nodes[id]->addNeighbour(nid);
+                nodes[nid]->setParent(id);
+            }
+        }
     }
 
-    const nodes_map_ptr &getNodes() const {
+    const TreeNode& getRoot() {
+        return *(nodes[root]);
+    }
+
+    nodes_map& getNodes() {
         return nodes;
     }
 
 private:
-    std::shared_ptr<TreeNode> root;
-    nodes_map_ptr nodes;
+    std::string root;
+    nodes_map nodes;
 };
 
 } // bridges_finder

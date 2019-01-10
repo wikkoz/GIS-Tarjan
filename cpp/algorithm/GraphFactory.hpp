@@ -26,8 +26,8 @@ public:
             auto& firstNode = (*nodes)[firstId];
             auto& secondNode = (*nodes)[secondId];
 
-            firstNode->addNeighbour(*secondNode);
-            secondNode->addNeighbour(*firstNode);
+            firstNode->addNeighbour(secondNode);
+            secondNode->addNeighbour(firstNode);
         }
 
         return std::make_shared<Graph>(nodes);
