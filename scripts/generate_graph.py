@@ -56,7 +56,7 @@ def generate_list_with_stars(size):
         SECOND_VERTEX: str(i)
     } for i in range(st_star2, sp_star2)])
 
-    print(json.dumps(edges, indent=4))
+    return edges
 
 
 VERTICES = 'vertices'
